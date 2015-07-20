@@ -18,7 +18,7 @@ dnf install --nogpgcheck -y wget kernel-devel sox git
 dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm
 
 # Cleanup Unnecessary Packages
-dnf remove -y rhythmbox evolution empathy firefox
+dnf remove rhythmbox evolution empathy firefox
 
 # Download and Install Google Chrome Repo & Browser
 echo "Installing Google Chrome"
@@ -132,10 +132,7 @@ echo "Installing gems"
 cd /usr/local/bin/rubygems
 ruby setup.rb --no-document
 
-chown -Rf $1:$1 /usr/local/bin/rubygems
-chmod -Rf 655 /usr/local/bin/rubygems
-
-echo "PATH=$PATH:/usr/local/bin/rubygems/bin" > /home/$1/.bashrc
+echo "PATH=$PATH:/usr/local/bin/rubygems" > /home/$1/.bashrc
 source /home/$1/.bashrc
 
 
@@ -163,6 +160,5 @@ rm -f idademo68_linux.tgz
 
 #Clean Up Post install
 echo "All Products and Applications installed successfully!"
-pause()
 exit
 
