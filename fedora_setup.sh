@@ -1,10 +1,5 @@
 #!bin/bash
-sublime = "/opt/sublime_text_3"
-dwn = "/home/$1/Downloads"
 
-function pause(){
-   read -p "Press [ENTER] to Continue..."
-}
 echo "Adding User to Sudoers"
 echo "$1	ALL=(ALL)	NOPASSWD: ALL" >> /etc/sudoers.d/$1
 
@@ -102,9 +97,8 @@ echo "Creating PHPINFO File"
 echo "<?php echo phpinfo(); ?>" >> /var/www/html/info.php
 
 echo "One Last Restart of Apache... For Luck"
-systemctl enable httpd.service
+systemctl restart httpd.service
 
-echo
 # Install Ruby, Rails and Gems
 echo "Install RVM"
 echo "Installing Gems"
@@ -112,10 +106,12 @@ curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 curl -L get.rvm.io | bash -s stable
 
 echo "Making RVM Available"
+echo "PATH=$PATH:/usr/local/rvm/bin" > /home/$1/.bash_profile
+
 source /home/$1/.bash_profile
 
 echo "Installing Ruby and Libraries"
-dnf install -y ruby patch libyaml-devel glibc-headers autoconf gcc-c++ glibc-devel patch readline-devel zlib-devel libffi-devel openssl-devel automake libtool bison sqlite-devel ruby-rdoc ruby-devel rubygems
+dnf install -y ruby patch libyaml-devel glibc-headers autoconf gcc-c++ glibc-devel patch readline-devel zlib-devel libffi-devel openssl-devel automake libtool bison sqlite-devel ruby-doc ruby-devel rubygems
 
 rvm reload
 rvm install 2.2
