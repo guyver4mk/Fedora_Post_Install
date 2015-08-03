@@ -7,7 +7,7 @@ echo "Ensuring system is up to date"
 dnf -y update
 
 echo "Install Preliminary Packages"
-dnf install --nogpgcheck -y wget kernel-devel sox git
+dnf install --nogpgcheck -y wget kernel-devel sox git samba-client samba-common cifs-utils
 
 # Add RPMForge Repo
 dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm
@@ -144,6 +144,12 @@ chown -f $1:$1 /usr/local/bin/composer
 chmod +x /usr/local/bin/composer
 
 
+#Install Vagrant
+echo "Installing Vagrant"
+wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4_x86_64.rpm
+dnf install -y --nogpgcheck vagrant_1.7.4_x86_64.rpm
+
+
 # Move Yum Meta Data to dnf
 echo "Migrating YUM Meta-Data"
 dnf install -y python-dnf-plugins-extras-migrate && dnf-2 migrate
@@ -155,6 +161,35 @@ wget https://out7.hex-rays.com/files/idademo68_linux.tgz
 tar -xvf idademo68_linux.tgz
 chown -Rf $1:$1 idademo68
 rm -f idademo68_linux.tgz
+
+#Install Android SDK
+echo "Installing Android"
+wget http://dl.google.com/android/android-sdk_r24.3.3-linux.tgz
+tar -xvf android-sdk_r24.3.3-linux.tgz
+chown -Rf $1:$1 android-sdk_r24.3.3-linux
+rm -f android-sdk_r24.3.3-linux.tgz
+mkdir /home/$1/Android
+mv android-sdk_r24.3.3-linux /home/$1/Android/SDK
+
+
+#Install Android Studio
+echo "Installing Studio"
+wget https://dl.google.com/dl/android/studio/ide-zips/1.3.0.10/android-studio-ide-141.2117773-linux.zip
+unzip android-studio-ide-141.2117773-linux.zip -d /home/$1
+mv /home/$1/android-studio-ide-141.2117773-linux /home/$1/android-studio
+
+#Install SQL Developer and MySQL Workbench
+echo "Download and Install SQL Developer & MySQL Workbench"
+google-chrome --app=http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html
+google-chrome --app=http://dev.mysql.com/downloads/workbench/
+
+read "Press [Enter] once downloaded"
+
+cd /home/$1/Downloads
+dnf install -y mysql-workbench-community*.rpm
+dff install -y sqldeveloper*.rpm
+
+
 
 #Clean Up Post install
 echo "All Products and Applications installed successfully!"
@@ -179,4 +214,3 @@ gcc --version | grep "gcc (GCC)"
 echo " "
 c++ --version | grep "c++ (GCC)"
 echo " "
-exit
